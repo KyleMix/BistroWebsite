@@ -229,15 +229,23 @@ p { line-height: 1.78; color: var(--text-mid); }
 }
 
 .nav-logo-img {
-  height: 52px;
+  height: 54px;
   width: auto;
   display: block;
-  border-radius: 6px;
-  transition: opacity 0.3s;
+  border-radius: 0;
+  mix-blend-mode: screen; /* makes black bg transparent over dark hero */
+  transition: border-radius 0.4s ease, mix-blend-mode 0s 0.4s, opacity 0.3s;
+}
+
+/* Scrolled white nav: switch to normal so logo shows as a clean rounded badge */
+#navbar.scrolled .nav-logo-img {
+  mix-blend-mode: normal;
+  border-radius: 8px;
+  transition: border-radius 0.4s ease, opacity 0.3s;
 }
 
 .nav-logo-img:hover {
-  opacity: 0.88;
+  opacity: 0.85;
 }
 
 .nav-links {
@@ -948,9 +956,9 @@ footer {
 .footer-logo-img {
   width: 170px;
   height: auto;
-  border-radius: 8px;
   margin-bottom: 0.5rem;
   display: block;
+  mix-blend-mode: screen; /* black bg disappears against dark green footer */
 }
 
 .footer-brand p {
