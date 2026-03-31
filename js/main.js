@@ -200,20 +200,33 @@
       submitBtn.textContent = 'Sending\u2026';
       submitBtn.disabled    = true;
 
-      // Simulate async submission (replace with real endpoint later)
-      setTimeout(function () {
-        form.reset();
+      // Submit to Formspree → forwards to bistro.lakelandvillage@gmail.com
+      fetch('https://formspree.io/f/bistro.lakelandvillage@gmail.com', {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      })
+      .then(function (response) {
+        if (response.ok) {
+          form.reset();
+          formSuccess.hidden = false;
+          formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          setTimeout(function () { formSuccess.hidden = true; }, 7000);
+        } else {
+          response.json().then(function (data) {
+            var msg = (data.errors && data.errors.map(function (e) { return e.message; }).join(', ')) ||
+                      'Something went wrong. Please call us at (360) 277-4137.';
+            alert(msg);
+          });
+        }
+      })
+      .catch(function () {
+        alert('Unable to send — please email us directly at bistro.lakelandvillage@gmail.com or call (360) 277-4137.');
+      })
+      .finally(function () {
         submitBtn.textContent = originalText;
         submitBtn.disabled    = false;
-
-        formSuccess.hidden = false;
-        formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-        // Auto-hide success message after 7 seconds
-        setTimeout(function () {
-          formSuccess.hidden = true;
-        }, 7000);
-      }, 1000);
+      });
     });
 
     // Remove error class on input
